@@ -36,7 +36,4 @@ bouton_page.pack()
 
 
 
-
-
-
 window.mainloop()
