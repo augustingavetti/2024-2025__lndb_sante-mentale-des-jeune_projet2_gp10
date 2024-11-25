@@ -9,10 +9,10 @@ window.config(background='#41B77F')
 def open_new_page():
     page = Tk()
     page.title("QCM")
-    page.geometry("1480x1080")
+    page.geometry("2160x1080")
     page.minsize(480, 360)
-    page.config(background='#41B77F')
-
+    page.config(background='#00CED1')
+    
 
 
 #premiere page
