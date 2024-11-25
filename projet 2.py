@@ -3,14 +3,14 @@ from tkinter import*
 window = Tk()
 window.title("Santé mentale")
 window.geometry("1080x720")
-window.minsize(480, 360)
+window.minsize(720, 480)
 window.config(background='#66CDAA')
 
 def open_new_page():
     page = Tk()
     page.title("QCM")
     page.geometry("2160x1080")
-    page.minsize(480, 360)
+    page.minsize(720, 480)
     page.config(background='#79CDCD')
 
 
