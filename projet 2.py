@@ -4,7 +4,7 @@ window = Tk()
 window.title("Santé mentale")
 window.geometry("1080x720")
 window.minsize(480, 360)
-window.config(background='#41B77F')
+window.config(background='#66CDAA')
 
 def open_new_page():
     page = Tk()
@@ -17,21 +17,21 @@ def open_new_page():
 
 #premiere page
 
-frame = Frame(window, bg="#41B77F")
+frame = Frame(window, bg="#66CDAA")
 
 #premier texte
 
-label_title= Label(frame, text = "Bienvenue dans notre projet !", font=("Arial", 40), bg="#41B77F", fg="white")
+label_title= Label(frame, text = "Bienvenue dans notre projet !", font=("Arial", 40), bg="#66CDAA", fg="white")
 label_title.pack()
 
 #deuxieme texte
-label_subtitle= Label(frame, text = "Vous allez maintenant répondre à un QCM", font=("Colibri", 30), bg="#41B77F", fg="white")
+label_subtitle= Label(frame, text = "Vous allez maintenant répondre à un QCM", font=("Colibri", 30), bg="#66CDAA", fg="white")
 label_subtitle.pack()
 
 frame.pack(expand=YES)
 
 #bouton
-bouton_page= Button(frame, text = "Commencer le QCM", font=("Courrier", 25), bg="white", fg="#41B77F", command= open_new_page)
+bouton_page= Button(frame, text = "Commencer le QCM", font=("Courrier", 25), bg="white", fg="#66CDAA", command= open_new_page)
 bouton_page.pack()
 
 
