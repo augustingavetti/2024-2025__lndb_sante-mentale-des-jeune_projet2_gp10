@@ -11,7 +11,7 @@ def open_new_page():
     page.title("QCM")
     page.geometry("2160x1080")
     page.minsize(480, 360)
-    page.config(background='#00CED1')
+    page.config(background='#79CDCD')
     
 
 
