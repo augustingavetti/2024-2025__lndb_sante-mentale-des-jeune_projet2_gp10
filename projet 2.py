@@ -12,7 +12,7 @@ def open_new_page():
     page.geometry("2160x1080")
     page.minsize(480, 360)
     page.config(background='#79CDCD')
-    
+
 
 
 #premiere page
