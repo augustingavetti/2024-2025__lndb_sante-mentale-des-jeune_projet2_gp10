@@ -35,5 +35,8 @@ bouton_page= Button(frame, text = "Commencer le QCM", font=("Courrier", 25), bg=
 bouton_page.pack()
 
 
+# def clear_screen(self):
+#     for window in self.root.winfo_children():
+#         window.destroy() 
 
 window.mainloop()
