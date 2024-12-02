@@ -13,8 +13,8 @@ window.config(background='#66CDAA')
 #     page.minsize(720, 480)
 #     page.config(background='#79CDCD')
 
-def clear_screen():
-    for widget in root.winfo_children():
+def clear_screen(self):
+    for widget in self.root.winfo_children():
         widget.destroy()
  
 #premiere page
