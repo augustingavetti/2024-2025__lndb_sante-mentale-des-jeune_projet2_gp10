@@ -92,12 +92,18 @@ class MentalHealthGUI:
             'height': 1,
             'activebackground': "#003366"
         }
+        
+        
+        
+
 
         # Ajoutez ici d'autres éléments de l'interface utilisateur pour l'écran d'accueil
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
             widget.destroy()  # Détruire tous les widgets de l'écran actuel
+            
+
 
 # Lancer l'application
 if __name__ == "__main__":
