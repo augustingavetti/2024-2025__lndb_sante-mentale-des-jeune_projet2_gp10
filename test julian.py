@@ -93,7 +93,7 @@ class MentalHealthGUI:
             'activebackground': "#003366"
         }
         tk.Label(self.root, text="Le QCM va maintenant commmencer", font=("Colibri", 20, "bold"), bg="#003366", fg="white").pack(pady=20)
-        tk.Button(self.root, text="Continuer", command=self.next_question, **button_style).pack(pady=20,)
+        tk.Button(self.root, text="Continuer", command=self.first_question, **button_style).pack(pady=20,)
         
         
         
@@ -105,15 +105,57 @@ class MentalHealthGUI:
 
 
 
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()  # Détruire tous les widgets de l'écran actuel
+    # def clear_screen(self):
+    #     for widget in self.root.winfo_children():
+    #         widget.destroy()  # Détruire tous les widgets de l'écran actuel
             
 
-    def next_question(self):
+    def first_question(self):
         for widget in self.root.winfo_children():
             widget.destroy()       
         tk.Label(self.root, text="Comment vous-sentez vous ?", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=5) 
+        tk.Button(self.root, text="Très bien", command=self.second_question,).pack(pady=20,)
+        tk.Button(self.root, text="bien", command=self.second_question,).pack(pady=20,)
+        tk.Button(self.root, text="moyen", command=self.second_question,).pack(pady=20,)
+        tk.Button(self.root, text="Pas ouf", command=self.second_question,).pack(pady=20,)
+        tk.Button(self.root, text="Pas bien", command=self.second_question,).pack(pady=20,)
+ 
+    def second_question(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        tk.Label(self.root, text="Quelle a été votre charge de travail cette semaine ?", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=5) 
+        tk.Button(self.root, text="Très bien", command=self.third_question,).pack(pady=20,)
+        tk.Button(self.root, text="bien", command=self.third_question,).pack(pady=20,)
+        tk.Button(self.root, text="un peu trop", command=self.third_question,).pack(pady=20,)
+        tk.Button(self.root, text="importante", command=self.third_question,).pack(pady=20,)
+        tk.Button(self.root, text="Beaucoup trop", command=self.third_question,).pack(pady=20,)
+
+    def third_question(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        tk.Label(self.root, text="Avez vous bien mangé cette semaine ?", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=5) 
+        tk.Button(self.root, text="Très bien", command=self.fourth_question,).pack(pady=20,)
+        tk.Button(self.root, text="bien", command=self.fourth_question,).pack(pady=20,)
+        tk.Button(self.root, text="juste à ma faim", command=self.fourth_question,).pack(pady=20,)
+        tk.Button(self.root, text="peu", command=self.fourth_question,).pack(pady=20,)
+        tk.Button(self.root, text="presque pas", command=self.fourth_question,).pack(pady=20,)    
+
+    def fourth_question(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        tk.Label(self.root, text="Quelle a été la relation avec ta famille ?", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=5) 
+        tk.Button(self.root, text="Parfaite", command=self.five_question,).pack(pady=20,)
+        tk.Button(self.root, text="Bien", command=self.five_question,).pack(pady=20,)
+        tk.Button(self.root, text="ça va", command=self.five_question,).pack(pady=20,)
+        tk.Button(self.root, text="J'ai vu mieux", command=self.five_question,).pack(pady=20,)
+        tk.Button(self.root, text="Pas bien du tout", command=self.five_question,).pack(pady=20,)     
+
+    def five_question(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        tk.Label(self.root, text="Autre question ?", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=5)
+            
+
 
 
 # Lancer l'application
