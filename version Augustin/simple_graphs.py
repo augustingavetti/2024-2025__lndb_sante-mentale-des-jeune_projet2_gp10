@@ -1,6 +1,6 @@
 import tkinter as tk
 
-def create_bar_graph(master, data, title, colors=None, max_height=100, bar_width=30, spacing=13, padding=10):
+def create_bar_graph(master, data, title, colors=None, max_height=200, bar_width=30, spacing=13, padding=10):
     graph_frame = tk.Frame(master, bg="#003366")
     graph_frame.pack(pady=10)
 
