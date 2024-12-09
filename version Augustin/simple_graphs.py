@@ -27,3 +27,4 @@ def create_bar_graph(master, data, title, colors=None, max_height=100, bar_width
         legend_label.configure(fg=bar_color)
 
     return graph_frame
+    return graph_frame
