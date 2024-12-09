@@ -5,7 +5,6 @@ import random
 class MentalHealthApp:
     def __init__(self):
         self.users = {}
-        self.admin_code = "1234"
         self.current_user = None
         self.responses = []
         self.weekly_summaries = []
@@ -64,6 +63,3 @@ class MentalHealthApp:
 
     def get_overall_summary(self):
         return dict(self.global_summary)
-
-    def is_admin(self, code):
-        return code == self.admin_code
