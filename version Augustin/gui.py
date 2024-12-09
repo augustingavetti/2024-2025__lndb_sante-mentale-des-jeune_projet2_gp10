@@ -78,11 +78,9 @@ class MentalHealthGUI:
         self.responses[questions_and_answers[self.current_question]["question"]] = answer
         self.current_question += 1
         self.clear_screen()
-        
+    
         if self.current_question < len(questions_and_answers):
-            tk.Label(self.root, text=f"Réponse enregistrée : {answer['text']}", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
-            tk.Button(self.root, text="Continuer", command=self.show_question,
-                      font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+            self.show_question()  # Passer directement à la question suivante
         else:
             self.show_daily_summary()
 
