@@ -1,10 +1,65 @@
+import json
+import os
 import tkinter as tk
-from tkinter import messagebox, scrolledtext
+from tkinter import messagebox
+from collections import defaultdict
+import random
+from dictionary import questions_and_answers
 from app import MentalHealthApp
 from simple_graphs import create_bar_graph
 from data import questions, encouragements
-from dictionary import questions_and_answers
-import random
+
+
+
+class MentalHealthApp:
+    logins_pwds_json = 'logins_pwds.json'
+    responses_json = 'responses.json'
+
+    def __init__(self):
+        self.dico_users = self.read_json_file(self.logins_pwds_json)
+        self.responses = self.read_json_file(self.responses_json)
+        self.current_user = None
+
+    def read_json_file(self, file_path):
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                return json.load(file)
+        return {}
+
+    def write_json_file(self, file_path, data):
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def create_account(self, login, pwd):
+        if login not in self.dico_users:
+            self.dico_users[login] = pwd
+            self.write_json_file(self.logins_pwds_json, self.dico_users)
+            self.responses[login] = []
+            self.write_json_file(self.responses_json, self.responses)
+            return True
+        return False
+
+    def login(self, login, pwd):
+        if login in self.dico_users and self.dico_users[login] == pwd:
+            self.current_user = login
+            return True
+        return False
+
+    def save_response(self, response):
+        if self.current_user:
+            self.responses[self.current_user].append(response)
+            self.write_json_file(self.responses_json, self.responses)
+
+    def generate_weekly_summary(self):
+        if self.current_user:
+            weekly_data = self.responses[self.current_user][-7:]
+            summary = defaultdict(int)
+            for response in weekly_data:
+                for question, answer in response.items():
+                    summary[answer] += 1
+            encouragement = random.choice(["Continuez ainsi !", "Vous faites un excellent travail !"])
+            return {"summary": summary, "encouragement": encouragement}
+        return None
 
 class MentalHealthGUI:
     def __init__(self, root):
@@ -14,6 +69,10 @@ class MentalHealthGUI:
         self.root.geometry("800x600")
         self.root.configure(bg="#003366")
         self.create_login_screen()
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
     def create_login_screen(self):
         self.clear_screen()
@@ -50,11 +109,28 @@ class MentalHealthGUI:
     def create_home_screen(self):
         self.clear_screen()
         tk.Label(self.root, text="Accueil", font=("Helvetica", 24), bg="#003366", fg="white").pack(pady=20)
-        
+
         button_style = {"font": ("Helvetica", 14), "bg": "#00509e", "fg": "white"}
-        tk.Button(self.root, text="Commencer le questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
-        tk.Button(self.root, text="Voir le dernier bilan", command=self.show_latest_summary, **button_style).pack(pady=10)
-        tk.Button(self.root, text="Voir le bilan global", command=self.show_overall_summary, **button_style).pack(pady=10)
+        tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
+        tk.Button(self.root, text="Voir le résumé hebdomadaire", command=self.view_summary, **button_style).pack(pady=5)
+
+    def login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        if self.app.login(username, password):
+            messagebox.showinfo("Succès", "Connexion réussie !")
+            self.create_home_screen()
+        else:
+            messagebox.showerror("Erreur", "Nom d'utilisateur ou mot de passe incorrect.")
+
+    def create_account(self):
+        username = self.new_username_entry.get()
+        password = self.new_password_entry.get()
+        if self.app.create_account(username, password):
+            messagebox.showinfo("Succès", "Compte créé avec succès !")
+            self.create_login_screen()
+        else:
+            messagebox.showerror("Erreur", "Le nom d'utilisateur existe déjà.")
 
     def start_questionnaire(self):
         self.clear_screen()
@@ -66,7 +142,7 @@ class MentalHealthGUI:
         if self.current_question < len(questions_and_answers):
             question_data = questions_and_answers[self.current_question]
             tk.Label(self.root, text=question_data["question"], font=("Helvetica", 16), bg="#003366", fg="white").pack(pady=20)
-    
+
             for answer in question_data["answers"]:
                 tk.Button(self.root, text=answer["text"], 
                           command=lambda a=answer: self.answer_question(a),
@@ -75,79 +151,43 @@ class MentalHealthGUI:
             self.show_daily_summary()
 
     def answer_question(self, answer):
-        self.responses[questions_and_answers[self.current_question]["question"]] = answer
+        self.responses[questions_and_answers[self.current_question]["question"]] = answer["category"]
         self.current_question += 1
         self.clear_screen()
-    
+
         if self.current_question < len(questions_and_answers):
-            self.show_question()  # Passer directement à la question suivante
+            self.show_question()
         else:
             self.show_daily_summary()
 
     def show_daily_summary(self):
         self.clear_screen()
         tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-    
+
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
-        for response in self.responses.values():
-            emotions_count[response["category"]] += 1
-    
-        create_bar_graph(self.root, emotions_count, "Résumé des réponses du jour")
-    
-        encouragement = random.choice(encouragements)
-        tk.Label(self.root, text=encouragement, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-    
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+        for category in self.responses.values():
+            emotions_count[category] += 1
 
-    def show_latest_summary(self):
-        summary = self.app.get_latest_summary()
-        if summary:
-            self.show_summary(summary, "Dernier bilan hebdomadaire")
-        else:
-            messagebox.showinfo("Information", "Pas encore de bilan hebdomadaire disponible.")
+        summary_text = "\n".join([f"{cat}: {count}" for cat, count in emotions_count.items()])
+        tk.Label(self.root, text=summary_text, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
 
-    def show_overall_summary(self):
-        summary = self.app.get_overall_summary()
-        if summary:
-            self.show_summary(summary, "Bilan global")
-        else:
-            messagebox.showinfo("Information", "Pas encore assez de données pour un bilan global.")
-
-    def show_summary(self, summary, title):
-        self.clear_screen()
-        tk.Label(self.root, text=title, font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-
-        create_bar_graph(self.root, summary, "Résumé des émotions")
-
-        encouragement = random.choice(encouragements)
+        encouragement = random.choice(["Continuez ainsi !", "Vous faites un excellent travail !"])
         tk.Label(self.root, text=encouragement, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
 
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                   font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
-    def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        if self.app.login(username, password):
-            self.create_home_screen()
+    def view_summary(self):
+        summary = self.app.generate_weekly_summary()
+        if summary:
+            summary_text = "\n".join([f"{cat}: {count}" for cat, count in summary["summary"].items()])
+            summary_text += f"\n\nEncouragement: {summary['encouragement']}"
+            messagebox.showinfo("Résumé Hebdomadaire", summary_text)
         else:
-            messagebox.showerror("Erreur", "Nom d'utilisateur ou mot de passe incorrect.")
-
-    def create_account(self):
-        username = self.new_username_entry.get()
-        password = self.new_password_entry.get()
-        if self.app.create_account(username, password):
-            messagebox.showinfo("Succès", "Compte créé avec succès!")
-            self.create_login_screen()
-        else:
-            messagebox.showerror("Erreur", "Ce nom d'utilisateur est déjà pris.")
-
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
+            messagebox.showinfo("Résumé Hebdomadaire", "Aucune donnée disponible.")
+            
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = MentalHealthGUI(root)
+    gui = MentalHealthGUI(root)
     root.mainloop()
