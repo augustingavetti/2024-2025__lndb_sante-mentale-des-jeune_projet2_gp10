@@ -21,7 +21,6 @@ def create_bar_graph(master, data, title, colors=None, max_height=230, bar_width
         canvas.create_rectangle(x, max_height - height + padding, x + bar_width, max_height + padding, fill=bar_color)
         canvas.create_text(x + bar_width/2, max_height + 10 + padding, text=key, fill="white", anchor="n")
         canvas.create_text(x + bar_width/2, max_height - height - 10 + padding, text=str(round(value, 2)), fill="white", anchor="s")
-
         legend_label = tk.Label(legend_frame, text=f"{key}: {value}", font=("Helvetica", 12), bg="#003366", fg="white")
         legend_label.pack(side=tk.LEFT, padx=5)
         legend_label.configure(fg=bar_color)
