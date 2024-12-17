@@ -1,15 +1,3 @@
-questions = [
-    "Comment vous sentez-vous aujourd'hui ?",
-    "Avez-vous bien dormi la nuit dernière ?",
-    "Avez-vous mangé équilibré aujourd'hui ?",
-    "Avez-vous fait de l'exercice aujourd'hui ?",
-    "Avez-vous eu des pensées positives aujourd'hui ?",
-    "Avez-vous ressenti du stress aujourd'hui ?",
-    "Avez-vous eu des interactions sociales positives aujourd'hui ?",
-    "Vous êtes-vous senti productif aujourd'hui ?",
-    "Avez-vous pris du temps pour vous détendre aujourd'hui ?",
-    "Avez-vous ressenti de l'anxiété aujourd'hui ?"
-]
 
 encouragements = [
     "Vous faites du bon travail ! Continuez comme ça !",
