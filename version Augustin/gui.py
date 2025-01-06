@@ -66,7 +66,7 @@ class MentalHealthGUI:
         self.app = MentalHealthApp()
         self.root = root
         self.root.title("Application de Santé Mentale")
-        self.root.geometry("800x600")
+        self.root.geometry("800x700")
         self.root.configure(bg="#003366")
         self.create_login_screen()
 
@@ -180,63 +180,20 @@ class MentalHealthGUI:
 
       tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
               font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-      
-   
+    
 
-    # def view_summary(self):
-    #   self.clear_screen()
-    #   tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-
-    # # Vérification si l'utilisateur a répondu à des questions
-    #   if not self.app.current_user or self.app.current_user not in self.app.responses or not self.app.responses[self.app.current_user]:
-    #      tk.Label(self.root, text="Aucune donnée disponible. Veuillez répondre au questionnaire d'abord.", 
-    #              font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-    #      tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-    #               font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-    #      return
-
-    # # Récupérer les réponses de l'utilisateur actuel
-    #   user_responses = self.app.responses[self.app.current_user][-1]  # Dernière session de réponses
-    #   emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
-
-    #   for category in user_responses.values():
-    #       emotions_count[category] += 1
-
-    # # Créer le graphique
-    #   create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
-    #                  colors=["#4caf50", "#ffeb3b", "#f44336"])
-
-    # # Message d'encouragement
-    #   encouragement = random.choice(encouragements)
-    #   tk.Label(self.root, text=encouragement, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-
-    #   tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-    #           font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-
-    def view_summary(self):
-          
+    def view_summary(self):  
       self.clear_screen()
-
       if tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20):
-          
-       
-      
          tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-
-    
       emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
       for category in self.responses.values():
-            emotions_count[category] += 1 
-
-    
+            emotions_count[category] += 1
       create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
-
-    
       encouragement = random.choice (encouragements)
       tk.Label(self.root, text=encouragement, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-
       tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
