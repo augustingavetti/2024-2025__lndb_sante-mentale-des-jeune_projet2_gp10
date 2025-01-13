@@ -46,16 +46,6 @@ class MentalHealthApp:
         self.global_summary = defaultdict(lambda: defaultdict(int))
         self.day_count = 0
 
-    def generate_weekly_summary(self):
-        weekly_data = self.responses[-7:]
-        summary = {}
-        for question in questions:
-            responses = [day[question] for day in weekly_data]
-            summary[question] = max(set(responses), key=responses.count)  # Mode (réponse la plus fréquente)
-        encouragement = random.choice(encouragements)
-        self.weekly_summaries.append({"data": summary, "encouragement": encouragement})
-        self.users[self.current_user]["weekly_summaries"] = self.weekly_summaries
-
     def get_latest_summary(self):
         if self.weekly_summaries:
             return self.weekly_summaries[-1]
@@ -63,3 +53,5 @@ class MentalHealthApp:
 
     def get_overall_summary(self):
         return dict(self.global_summary)
+    
+
