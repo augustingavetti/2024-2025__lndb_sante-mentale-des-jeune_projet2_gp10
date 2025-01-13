@@ -184,6 +184,8 @@ class MentalHealthGUI:
       else:
           encouragement = random.choice(encouragements)
           message = encouragement
+      if emotions_count["Positif"] > 4:
+          message = "Tu vas très bien donc Mbappé est répartit à Madrid."    
       tk.Label(self.root, text=message, font=("Helvetica", 14),  bg="#003366",  fg="white",  wraplength=600
                ).pack(pady=20)
       tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,font=("Helvetica", 14),  bg="#00509e", fg="white").pack(pady=20)
