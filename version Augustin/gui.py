@@ -180,12 +180,12 @@ class MentalHealthGUI:
           emotions_count[category] += 1  
       create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",colors=["#4caf50", "#ffeb3b", "#f44336"])
       if emotions_count["Négatif"] > 4:
-          message = "Mbappé va te venir en aide afin d'aider ta santé mentale !!!"
+          message = "Mbappé va bientôt venir te voir pour te remonter le morale !!!"
       else:
           encouragement = random.choice(encouragements)
           message = encouragement
       if emotions_count["Positif"] > 4:
-          message = "Tu vas très bien donc Mbappé est répartit à Madrid."    
+          message = "Tu vas très bien, Mbappé te salut de loin."    
       tk.Label(self.root, text=message, font=("Helvetica", 14),  bg="#003366",  fg="white",  wraplength=600
                ).pack(pady=20)
       tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,font=("Helvetica", 14),  bg="#00509e", fg="white").pack(pady=20)
