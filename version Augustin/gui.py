@@ -102,7 +102,7 @@ class MentalHealthGUI:
         button_style = {"font": ("Helvetica", 14), "bg": "#00509e", "fg": "white"}
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
-        tk.Button(self.root, text="résumé des 3 dernier graphiques",  **button_style).pack(pady=5)
+        tk.Button(self.root, text="résumé de la semaine",  **button_style).pack(pady=5)
 
     def login(self):
         username = self.username_entry.get()
