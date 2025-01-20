@@ -8,7 +8,7 @@ from dictionary import questions_and_answers
 from app import MentalHealthApp
 from simple_graphs import create_bar_graph
 from data import questions, encouragements
-
+import webbrowser
 
 
 class MentalHealthApp:
@@ -189,6 +189,9 @@ class MentalHealthGUI:
       tk.Label(self.root, text=message, font=("Helvetica", 14),  bg="#003366",  fg="white",  wraplength=600
                ).pack(pady=20)
       tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,font=("Helvetica", 14),  bg="#00509e", fg="white").pack(pady=20)
+      tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, visitez : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 10), bg="#003366", fg="white", wraplength=600).pack(pady=10)
+
+    
 
 if __name__ == "__main__":
     root = tk.Tk()
