@@ -133,6 +133,7 @@ class MentalHealthGUI:
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
+        tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, visitez : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600).pack(pady=200)
 
     def login(self):
         username = self.username_entry.get()
