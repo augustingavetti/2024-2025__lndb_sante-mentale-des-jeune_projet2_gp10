@@ -2,12 +2,14 @@ import json
 import os
 import tkinter as tk
 from tkinter import messagebox
-from collections import defaultdict
-import random
-from dictionary import questions_and_answers
 from simple_graphs import create_bar_graph
 from data import questions, encouragements
 import csv
+import webbrowser
+from collections import defaultdict
+import random
+from dictionary import questions_and_answers
+from data import questions, encouragements
 
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
@@ -25,6 +27,7 @@ class MentalHealthApp:
                         writer.writerow([user, question, answer])
         
         print(f"Les réponses ont été exportées avec succès dans {filename}.")
+    
     logins_pwds_json = 'logins_pwds.json'
     responses_json = 'responses.json'
 
@@ -87,7 +90,6 @@ class MentalHealthGUI:
         self.root.geometry("800x700")
         self.root.configure(bg="#003366")
         self.create_login_screen()
-        
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
@@ -133,7 +135,10 @@ class MentalHealthGUI:
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
-        tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, visitez : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600).pack(pady=200)
+
+        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, visitez : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
+        link.pack(pady=200)
+        link.bind("<Button-1>", lambda e: webbrowser.open_new("https://baronmag.com/2018/02/ouvrages-sante-mentale/"))
 
     def login(self):
         username = self.username_entry.get()
@@ -220,11 +225,9 @@ class MentalHealthGUI:
         self.clear_screen()
         tk.Label(self.root, text="Résumé de la semaine", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
         weekly_summary = self.app.calculate_weekly_summary()
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
         create_bar_graph(self.root, weekly_summary, title="Moyenne des réponses de la semaine",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
- 
 
 if __name__ == "__main__":
     root = tk.Tk()
