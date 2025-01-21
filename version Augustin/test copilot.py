@@ -193,6 +193,7 @@ class MentalHealthGUI:
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         for category in self.responses.values():
             emotions_count[category] += 1
+    
 
         create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
@@ -225,6 +226,8 @@ class MentalHealthGUI:
         self.clear_screen()
         tk.Label(self.root, text="Résumé de la semaine", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
         weekly_summary = self.app.calculate_weekly_summary()
+        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
+                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
         create_bar_graph(self.root, weekly_summary, title="Moyenne des réponses de la semaine",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
