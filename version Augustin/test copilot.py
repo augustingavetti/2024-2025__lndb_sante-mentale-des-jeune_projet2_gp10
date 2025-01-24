@@ -136,7 +136,7 @@ class MentalHealthGUI:
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
 
-        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, visitez : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
+        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
         link.pack(pady=200)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://baronmag.com/2018/02/ouvrages-sante-mentale/"))
 
