@@ -6,10 +6,8 @@ from simple_graphs import create_bar_graph
 from data import questions, encouragements
 import csv
 import webbrowser
-from collections import defaultdict
 import random
 from dictionary import questions_and_answers
-from data import questions, encouragements
 
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
@@ -194,7 +192,6 @@ class MentalHealthGUI:
         for category in self.responses.values():
             emotions_count[category] += 1
     
-
         create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
 
@@ -207,11 +204,22 @@ class MentalHealthGUI:
     def view_summary(self):
         self.clear_screen()
         tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+        
+        if  tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, 
+                      font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20):
+            tk.Label(self.root, text="Aucune réponse disponible pour aujourd'hui. Veuillez remplir le questionnaire.",
+                     font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
+            tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, 
+                      font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+            return
+
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         for category in self.responses.values():
             emotions_count[category] += 1
+
         create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
+        
         if emotions_count["Négatif"] > 4:
             message = "Mbappé va bientôt venir te voir pour te remonter le morale !!!"
         else:
@@ -219,6 +227,7 @@ class MentalHealthGUI:
             message = encouragement
         if emotions_count["Positif"] > 4:
             message = "Tu vas très bien, Mbappé te salut de loin."
+        
         tk.Label(self.root, text=message, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
