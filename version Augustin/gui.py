@@ -136,9 +136,9 @@ class MentalHealthGUI:
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
 
-        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
+        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici :https://www.psycom.org/sorienter/les-lignes-decoute/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
         link.pack(pady=200)
-        link.bind("<Button-1>", lambda e: webbrowser.open_new("https://baronmag.com/2018/02/ouvrages-sante-mentale/"))
+        link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.psycom.org/sorienter/les-lignes-decoute/"))
 
     def login(self):
         username = self.username_entry.get()
@@ -189,6 +189,7 @@ class MentalHealthGUI:
     def show_daily_summary(self):
         self.clear_screen()
         tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+      
 
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         for category in self.responses.values():
@@ -207,6 +208,8 @@ class MentalHealthGUI:
     def view_summary(self):
         self.clear_screen()
         tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
+                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         for category in self.responses.values():
             emotions_count[category] += 1
@@ -224,7 +227,7 @@ class MentalHealthGUI:
 
     def view_weekly_summary(self):
         self.clear_screen()
-        tk.Label(self.root, text="Résumé de la semaine", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+        tk.Label(self.root, text="Résumé des derniers questionnaires.", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
         weekly_summary = self.app.calculate_weekly_summary()
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                   font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
