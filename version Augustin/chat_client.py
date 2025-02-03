@@ -2,14 +2,16 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import scrolledtext
-import time  # Ajout de l'importation du module time
 
-def handle_client():
+def receive_message():
     while True:
-        message = client_socket.recv(1024).decode('utf-8')
-        chat_area.config(state=tk.NORMAL)
-        chat_area.insert(tk.END, "Client: " + message + "\n")
-        chat_area.config(state=tk.DISABLED)
+        try:
+            message = client_socket.recv(1024).decode('utf-8')
+            chat_area.config(state=tk.NORMAL)
+            chat_area.insert(tk.END, "Serveur: " + message + "\n")
+            chat_area.config(state=tk.DISABLED)
+        except:
+            break
 
 def send_message():
     message = message_entry.get()
@@ -19,28 +21,29 @@ def send_message():
     chat_area.insert(tk.END, "Vous: " + message + "\n")
     chat_area.config(state=tk.DISABLED)
 
-def start_server():
+def connect_to_server():
     global client_socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('0.0.0.0', 12345))
-    server_socket.listen(1)
-    chat_area.insert(tk.END, "En attente de connexion...\n")
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    discovery_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    discovery_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    discovery_socket.settimeout(5)
+    discovery_socket.sendto(b"DISCOVER_SERVER", ('<broadcast>', 12345))
     
-    client_socket, addr = server_socket.accept()
-    chat_area.insert(tk.END, f"Connexion de {addr}\n")
-
-    thread = threading.Thread(target=handle_client)
-    thread.start()
-
-def broadcast_ip():
-    broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    while True:
-        broadcast_socket.sendto(b"SERVER_IP", ('<broadcast>', 12345))
-        time.sleep(5)
+    try:
+        while True:
+            data, addr = discovery_socket.recvfrom(1024)
+            if data == b"SERVER_IP":
+                server_ip = addr[0]
+                client_socket.connect((server_ip, 12345))
+                chat_area.insert(tk.END, f"Connecté au serveur à {server_ip}\n")
+                thread = threading.Thread(target=receive_message)
+                thread.start()
+                break
+    except socket.timeout:
+        chat_area.insert(tk.END, "Impossible de trouver le serveur.\n")
 
 root = tk.Tk()
-root.title("Chat Serveur")
+root.title("Chat Client")
 
 chat_area = scrolledtext.ScrolledText(root, state=tk.DISABLED)
 chat_area.pack(padx=10, pady=10)
@@ -52,5 +55,7 @@ message_entry.bind("<Return>", lambda event: send_message())
 send_button = tk.Button(root, text="Envoyer", command=send_message)
 send_button.pack(padx=10, pady=10)
 
-thread = threading.Thread(target=start_server)
+thread = threading.Thread(target=connect_to_server)
+thread.start()
 
+root.mainloop()
