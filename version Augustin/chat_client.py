@@ -26,9 +26,9 @@ def connect_to_server():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     discovery_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     discovery_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    discovery_socket.settimeout(5)
+    discovery_socket.settimeout(10)
     discovery_socket.sendto(b"DISCOVER_SERVER", ('<broadcast>', 12345))
-    
+
     try:
         while True:
             data, addr = discovery_socket.recvfrom(1024)
@@ -59,3 +59,4 @@ thread = threading.Thread(target=connect_to_server)
 thread.start()
 
 root.mainloop()
+
