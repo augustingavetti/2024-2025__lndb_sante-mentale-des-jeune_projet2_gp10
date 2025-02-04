@@ -9,7 +9,7 @@ import webbrowser
 from collections import defaultdict
 import random
 from dictionary import questions_and_answers
-from data import questions, encouragements
+
 
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
@@ -232,12 +232,30 @@ class MentalHealthGUI:
     def view_weekly_summary(self):
         self.clear_screen()
         tk.Label(self.root, text="Résumé des derniers questionnaires.", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-        weekly_summary = self.app.calculate_weekly_summary()
+        
+        # Calculate the averages of the last three questionnaires
+        last_three_responses = list(self.app.responses.values())[-3:]
+        emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
+        total_responses = 0
+
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                   font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-        create_bar_graph(self.root, weekly_summary, title="Moyenne des réponses de la semaine",
+
+
+        for user_responses in last_three_responses:
+            for response in user_responses:
+                emotions_count[response] += 1
+                total_responses += 1
+
+        if total_responses > 0:
+            for key in emotions_count:
+                emotions_count[key] /= total_responses
+
+        create_bar_graph(self.root, emotions_count, title="Moyenne des réponses des 3 derniers questionnaires",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+        
+        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
+                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
 if __name__ == "__main__":
     root = tk.Tk()
