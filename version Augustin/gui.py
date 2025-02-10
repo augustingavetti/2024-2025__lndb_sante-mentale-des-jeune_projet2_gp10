@@ -315,3 +315,53 @@ if __name__ == "__main__":
 #faire peut etre une messagerie a sens unique
 
 #faire un bouton pour exporter les données dans un fichier csv
+
+# def export_data_to_csv(self):
+#     # Vérifier si l'utilisateur actuel est défini
+#     if not self.app.current_user:
+#         messagebox.showerror("Erreur", "Utilisateur non connecté.")
+#         return
+
+#     # Récupérer les réponses de l'utilisateur actuel uniquement
+#     current_user_responses = self.app.responses.get(self.app.current_user, [])
+
+#     if not current_user_responses:
+#         messagebox.showerror("Erreur", "Aucune donnée à exporter.")
+#         return
+
+#     # Définir le nom du fichier CSV
+#     filename = f"{self.app.current_user}_responses.csv"
+
+#     # Écrire les données dans le fichier CSV
+#     with open(filename, mode='w', newline='', encoding='utf-8') as file:
+#         writer = csv.writer(file)
+#         writer.writerow(["Question", "Réponse"])
+#         for response in current_user_responses:
+#             if isinstance(response, dict):
+#                 for question, answer in response.items():
+#                     writer.writerow([question, answer])
+#             else:
+#                 writer.writerow(["Réponse inattendue", response])
+
+#     messagebox.showinfo("Succès", f"Les données ont été exportées dans le fichier {filename}.")
+
+#     def submit_questionnaire(self):
+#     # Simuler la soumission du questionnaire et le traitement des réponses
+#     self.responses = {"Question 1": "Positif", "Question 2": "Neutre", "Question 3": "Négatif"}
+    
+#     # Enregistrer les réponses pour l'utilisateur actuel
+#     if self.app.current_user not in self.app.responses:
+#         self.app.responses[self.app.current_user] = []
+#     self.app.responses[self.app.current_user].append(self.responses)
+    
+#     self.view_summary()
+
+#     def login(self):
+#     username = self.username_entry.get()
+#     password = self.password_entry.get()
+#     if self.app.login(username, password):
+#         self.app.current_user = username  # Définir l'utilisateur actuel
+#         messagebox.showinfo("Succès", "Connexion réussie !")
+#         self.create_home_screen()
+#     else:
+#         messagebox.showerror("Erreur", "Nom d'utilisateur ou mot de passe incorrect.")
