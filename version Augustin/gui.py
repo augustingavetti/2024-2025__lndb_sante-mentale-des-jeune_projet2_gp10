@@ -9,6 +9,10 @@ import webbrowser
 from collections import defaultdict
 import random
 from dictionary import questions_and_answers
+from tkinter import scrolledtext
+
+
+
 
 
 class MentalHealthApp:
@@ -134,16 +138,37 @@ class MentalHealthGUI:
         button_style = {"font": ("Helvetica", 14), "bg": "#00509e", "fg": "white"}
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
-        tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
+        tk.Button(self.root, text="Moyenne des résumés", command=self.moy_summary, **button_style).pack(pady=5)
+        tk.Button(self.root, text="Exporter les données", command=self.export_data_to_csv, **button_style).pack(pady=5)
 
-        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici :https://www.psycom.org/sorienter/les-lignes-decoute/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=400, cursor="hand2")
+        link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici ", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=400, cursor="hand2")
         link.pack(pady=50)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.psycom.org/sorienter/les-lignes-decoute/"))
 
-        link = tk.Label(self.root, text="Pour des livres sur la santé mentale, cliqué ici :https://www.babelio.com/livres-/Sante-mentale/78415", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
+        link = tk.Label(self.root, text="Pour des livres sur la santé mentale, cliqué ici", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
         link.pack(pady=50)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.babelio.com/livres-/Sante-mentale/78415"))
 
+    def export_data_to_csv(self):
+        # Récupérer les réponses de l'utilisateur actuel uniquement
+        current_user_responses = self.app.responses.get(self.app.current_user, [])
+
+        if not current_user_responses:
+            messagebox.showerror("Erreur", "Aucune donnée à exporter.")
+            return
+
+        # Définir le nom du fichier CSV
+        filename = f"{self.app.current_user}_responses.csv"
+
+        # Écrire les données dans le fichier CSV
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Question", "Réponse"])
+            for response in current_user_responses:
+                for question, answer in response.items():
+                    writer.writerow([question, answer])
+
+        messagebox.showinfo("Succès", f"Les données ont été exportées dans le fichier {filename}.")
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -229,35 +254,64 @@ class MentalHealthGUI:
         tk.Label(self.root, text=message, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
-    def view_weekly_summary(self):
+    def moy_summary(self):
         self.clear_screen()
-        tk.Label(self.root, text="Résumé des derniers questionnaires.", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-        
-        # Calculate the averages of the last three questionnaires
-        last_three_responses = list(self.app.responses.values())[-3:]
+        tk.Label(self.root, text="Résumé des derniers questionnaires", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+
+    # Récupérer les réponses de l'utilisateur actuel uniquement
+        current_user_responses = self.app.responses.get(self.app.current_user, [])
+
+    # Debug : Afficher les réponses de l'utilisateur actuel
+        print("Réponses de l'utilisateur actuel :", current_user_responses)
+
+    # Vérifier s'il y a des réponses
+        if len(current_user_responses) == 0:
+            tk.Label(self.root, text="Aucune donnée disponible.", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
+            tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
+                    font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+            return
+
+    # Prendre les 3 derniers questionnaires (si disponibles)
+        last_three_responses = current_user_responses[-3:]
+
+    # Compter les émotions
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         total_responses = 0
 
+        for response in last_three_responses:
+            print(f"Réponse analysée : {response}")  # Debug
+            if isinstance(response, dict):
+               for question, category in response.items():
+                    print(f"Question : {question}, Catégorie : {category}")  # Debug
+                    if category in emotions_count:
+                      emotions_count[category] += 1
+                      total_responses += 1
+                    else:
+                       print(f"Catégorie non reconnue : {category}")  # Debug
+            else:
+              print(f"Réponse inattendue : {response}")  # Debug
+
+    # Vérifier si des réponses valides ont été trouvées
+        if total_responses == 0:
+           tk.Label(self.root, text="Pas assez de données pour générer un résumé.", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
+        else:
+        # Calcul des moyennes
+           for key in emotions_count:
+              emotions_count[key] = round(emotions_count[key] / total_responses, 2)
+
+        # Créer le graphique
+           self.create_bar_graph(emotions_count, title="Moyenne des réponses des 3 derniers questionnaires",
+                              colors=["#4caf50", "#ffeb3b", "#f44336"])
+
+    # Bouton de retour
+      # ...existing code...
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-
-
-        for user_responses in last_three_responses:
-            for response in user_responses:
-                emotions_count[response] += 1
-                total_responses += 1
-
-        if total_responses > 0:
-            for key in emotions_count:
-                emotions_count[key] /= total_responses
-
-        create_bar_graph(self.root, emotions_count, title="Moyenne des réponses des 3 derniers questionnaires",
-                         colors=["#4caf50", "#ffeb3b", "#f44336"])
-        
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+                font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)  # Ajout de la parenthèse fermante
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    gui = MentalHealthGUI(root)
-    root.mainloop()
+  root = tk.Tk()
+  gui = MentalHealthGUI(root)
+  root.mainloop()
+#faire peut etre une messagerie a sens unique
+
+#faire un bouton pour exporter les données dans un fichier csv
