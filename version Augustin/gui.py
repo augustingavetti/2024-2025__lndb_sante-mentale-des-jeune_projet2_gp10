@@ -11,10 +11,6 @@ import random
 from dictionary import questions_and_answers
 from tkinter import scrolledtext
 
-
-
-
-
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
         if not self.responses:
@@ -169,10 +165,12 @@ class MentalHealthGUI:
                     writer.writerow([question, answer])
 
         messagebox.showinfo("Succès", f"Les données ont été exportées dans le fichier {filename}.")
+
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
         if self.app.login(username, password):
+            self.app.current_user = username  # Définir l'utilisateur actuel
             messagebox.showinfo("Succès", "Connexion réussie !")
             self.create_home_screen()
         else:
@@ -219,12 +217,10 @@ class MentalHealthGUI:
         self.clear_screen()
         tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
       
-
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         for category in self.responses.values():
             emotions_count[category] += 1
     
-
         create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
                          colors=["#4caf50", "#ffeb3b", "#f44336"])
 
@@ -233,6 +229,9 @@ class MentalHealthGUI:
 
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                   font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+
+        # Enregistrer les réponses pour l'utilisateur actuel
+        self.app.save_response(self.responses)
 
     def view_summary(self):
         self.clear_screen()
@@ -258,110 +257,56 @@ class MentalHealthGUI:
         self.clear_screen()
         tk.Label(self.root, text="Résumé des derniers questionnaires", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
 
-    # Récupérer les réponses de l'utilisateur actuel uniquement
+        # Récupérer les réponses de l'utilisateur actuel uniquement
         current_user_responses = self.app.responses.get(self.app.current_user, [])
 
-    # Debug : Afficher les réponses de l'utilisateur actuel
+        # Debug : Afficher les réponses de l'utilisateur actuel
         print("Réponses de l'utilisateur actuel :", current_user_responses)
 
-    # Vérifier s'il y a des réponses
+        # Vérifier s'il y a des réponses
         if len(current_user_responses) == 0:
             tk.Label(self.root, text="Aucune donnée disponible.", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
             tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
                     font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
             return
 
-    # Prendre les 3 derniers questionnaires (si disponibles)
+        # Prendre les 3 derniers questionnaires (si disponibles)
         last_three_responses = current_user_responses[-3:]
 
-    # Compter les émotions
+        # Compter les émotions
         emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
         total_responses = 0
 
         for response in last_three_responses:
             print(f"Réponse analysée : {response}")  # Debug
             if isinstance(response, dict):
-               for question, category in response.items():
+                for question, category in response.items():
                     print(f"Question : {question}, Catégorie : {category}")  # Debug
                     if category in emotions_count:
-                      emotions_count[category] += 1
-                      total_responses += 1
+                        emotions_count[category] += 1
+                        total_responses += 1
                     else:
-                       print(f"Catégorie non reconnue : {category}")  # Debug
+                        print(f"Catégorie non reconnue : {category}")  # Debug
             else:
-              print(f"Réponse inattendue : {response}")  # Debug
+                print(f"Réponse inattendue : {response}")  # Debug
 
-    # Vérifier si des réponses valides ont été trouvées
+        # Vérifier si des réponses valides ont été trouvées
         if total_responses == 0:
-           tk.Label(self.root, text="Pas assez de données pour générer un résumé.", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
+            tk.Label(self.root, text="Pas assez de données pour générer un résumé.", font=("Helvetica", 14), bg="#003366", fg="white").pack(pady=20)
         else:
-        # Calcul des moyennes
-           for key in emotions_count:
-              emotions_count[key] = round(emotions_count[key] / total_responses, 2)
+            # Calcul des moyennes
+            for key in emotions_count:
+                emotions_count[key] = round(emotions_count[key] / total_responses, 2)
 
-        # Créer le graphique
-           self.create_bar_graph(emotions_count, title="Moyenne des réponses des 3 derniers questionnaires",
-                              colors=["#4caf50", "#ffeb3b", "#f44336"])
+            # Créer le graphique
+            create_bar_graph(self.root, emotions_count, title="Moyenne des réponses des 3 derniers questionnaires",
+                             colors=["#4caf50", "#ffeb3b", "#f44336"])
 
-    # Bouton de retour
-      # ...existing code...
+        # Bouton de retour
         tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)  # Ajout de la parenthèse fermante
+                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
 
 if __name__ == "__main__":
-  root = tk.Tk()
-  gui = MentalHealthGUI(root)
-  root.mainloop()
-#faire peut etre une messagerie a sens unique
-
-#faire un bouton pour exporter les données dans un fichier csv
-
-# def export_data_to_csv(self):
-#     # Vérifier si l'utilisateur actuel est défini
-#     if not self.app.current_user:
-#         messagebox.showerror("Erreur", "Utilisateur non connecté.")
-#         return
-
-#     # Récupérer les réponses de l'utilisateur actuel uniquement
-#     current_user_responses = self.app.responses.get(self.app.current_user, [])
-
-#     if not current_user_responses:
-#         messagebox.showerror("Erreur", "Aucune donnée à exporter.")
-#         return
-
-#     # Définir le nom du fichier CSV
-#     filename = f"{self.app.current_user}_responses.csv"
-
-#     # Écrire les données dans le fichier CSV
-#     with open(filename, mode='w', newline='', encoding='utf-8') as file:
-#         writer = csv.writer(file)
-#         writer.writerow(["Question", "Réponse"])
-#         for response in current_user_responses:
-#             if isinstance(response, dict):
-#                 for question, answer in response.items():
-#                     writer.writerow([question, answer])
-#             else:
-#                 writer.writerow(["Réponse inattendue", response])
-
-#     messagebox.showinfo("Succès", f"Les données ont été exportées dans le fichier {filename}.")
-
-#     def submit_questionnaire(self):
-#     # Simuler la soumission du questionnaire et le traitement des réponses
-#     self.responses = {"Question 1": "Positif", "Question 2": "Neutre", "Question 3": "Négatif"}
-    
-#     # Enregistrer les réponses pour l'utilisateur actuel
-#     if self.app.current_user not in self.app.responses:
-#         self.app.responses[self.app.current_user] = []
-#     self.app.responses[self.app.current_user].append(self.responses)
-    
-#     self.view_summary()
-
-#     def login(self):
-#     username = self.username_entry.get()
-#     password = self.password_entry.get()
-#     if self.app.login(username, password):
-#         self.app.current_user = username  # Définir l'utilisateur actuel
-#         messagebox.showinfo("Succès", "Connexion réussie !")
-#         self.create_home_screen()
-#     else:
-#         messagebox.showerror("Erreur", "Nom d'utilisateur ou mot de passe incorrect.")
+    root = tk.Tk()
+    gui = MentalHealthGUI(root)
+    root.mainloop()
