@@ -53,7 +53,7 @@ questions_and_answers = [
         "question": "Avez-vous ressenti du stress aujourd'hui ?",
         "answers": [
             {"text": "Non, pas du tout", "category": "Positif"},
-            {"text": "Un peu, mais gérable", "category": "Neutre"},
+            {"text": "Un peu, mais gérable", "category": "Positif"},
             {"text": "Oui, assez", "category": "Négatif"},
             {"text": "Oui, beaucoup", "category": "Négatif"},
             {"text": "Extrêmement stressé", "category": "Négatif"}
