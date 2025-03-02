@@ -130,17 +130,13 @@ class MentalHealthGUI:
     def create_home_screen(self):
         self.clear_screen()
         tk.Label(self.root, text="Accueil", font=("Helvetica", 24), bg="#003366", fg="white").pack(pady=20)
-
         button_style = {"font": ("Helvetica", 14), "bg": "#00509e", "fg": "white"}
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Moyenne des résumés", command=self.moy_summary, **button_style).pack(pady=5)
-        tk.Button(self.root, text="Exporter les données", command=self.export_data_to_csv, **button_style).pack(pady=5)
-
         link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici ", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=400, cursor="hand2")
         link.pack(pady=50)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.psycom.org/sorienter/les-lignes-decoute/"))
-
         link = tk.Label(self.root, text="Pour des livres sur la santé mentale, cliqué ici", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
         link.pack(pady=50)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.babelio.com/livres-/Sante-mentale/78415"))
