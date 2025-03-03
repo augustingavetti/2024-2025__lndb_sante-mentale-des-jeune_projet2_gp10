@@ -12,6 +12,6 @@ faire marcher le bilan globale
 on a retirer des fichiers inutiles
 on a ajouté des messages de soutien pour quand il y a trop de réponses négative ou positive
 resumer de la semaine
-nous avons réorganisé tous les fichiés
+nous avons réorganisé tous les fichiers
 
 neccéssite python sur votre ordinateur pour lancer le programme
