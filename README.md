@@ -1,4 +1,5 @@
 # 2024-2025__lndb_sante-mantale-des-jeune_projet2_gp10
+Notre projet a pour but d'aider les gens en dépréssion et qui ont besoin de soutien
 logiciel pour santé mental
 utilisateur clique sur des choix
 bilan a la fin de la semaine transmis au parents et psy + a la personne
