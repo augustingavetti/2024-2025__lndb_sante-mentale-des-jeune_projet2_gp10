@@ -8,6 +8,8 @@ import csv
 import webbrowser
 import random
 from dictionary import questions_and_answers
+from chat_client import rechercher_questions, faq_data
+
 
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
@@ -133,113 +135,69 @@ class MentalHealthGUI:
         tk.Button(self.root, text="Répondre au questionnaire", command=self.start_questionnaire, **button_style).pack(pady=10)
         tk.Button(self.root, text="Voir le dernier résumé", command=self.view_summary, **button_style).pack(pady=5)
         tk.Button(self.root, text="Résumé de la semaine", command=self.view_weekly_summary, **button_style).pack(pady=5)
+        tk.Button(self.root, text="FAQ", command=self.open_faq_window, **button_style).pack(pady=5)
 
         link = tk.Label(self.root, text="Pour plus d'informations sur la santé mentale, cliqué ici : https://baronmag.com/2018/02/ouvrages-sante-mentale/", font=("Helvetica", 15), bg="#003366", fg="white", wraplength=600, cursor="hand2")
         link.pack(pady=200)
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://baronmag.com/2018/02/ouvrages-sante-mentale/"))
 
-    def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        if self.app.login(username, password):
-            messagebox.showinfo("Succès", "Connexion réussie !")
-            self.create_home_screen()
-        else:
-            messagebox.showerror("Erreur", "Nom d'utilisateur ou mot de passe incorrect.")
+    def open_faq_window(self):
+        faq_window = tk.Toplevel(self.root)
+        faq_window.title("FAQ Santé Mentale")
+        faq_window.geometry("600x500")
+        faq_window.configure(bg="#ADD8E6")
 
-    def create_account(self):
-        username = self.new_username_entry.get()
-        password = self.new_password_entry.get()
-        if self.app.create_account(username, password):
-            messagebox.showinfo("Succès", "Compte créé avec succès !")
-            self.create_login_screen()
-        else:
-            messagebox.showerror("Erreur", "Le nom d'utilisateur existe déjà.")
+        # Label de titre
+        title_label = tk.Label(faq_window, text="FAQ Santé Mentale", font=("Arial", 16, "bold"), bg="#ADD8E6")
+        title_label.pack(pady=10)
 
-    def start_questionnaire(self):
-        self.clear_screen()
-        self.current_question = 0
-        self.responses = {}
-        self.show_question()
+        # Barre de recherche
+        frame_search = tk.Frame(faq_window, bg="#ADD8E6")
+        frame_search.pack(pady=5)
 
-    def show_question(self):
-        if self.current_question < len(questions_and_answers):
-            question_data = questions_and_answers[self.current_question]
-            tk.Label(self.root, text=question_data["question"], font=("Helvetica", 16), bg="#003366", fg="white").pack(pady=20)
+        entry_search = tk.Entry(frame_search, font=("Arial", 14), width=30)
+        entry_search.pack(side="left", padx=5)
 
-            for answer in question_data["answers"]:
-                tk.Button(self.root, text=answer["text"], 
-                          command=lambda a=answer: self.answer_question(a),
-                          font=("Helvetica", 12), bg="#00509e", fg="white").pack(pady=5)
-        else:
-            self.show_daily_summary()
+        btn_search = tk.Button(frame_search, text="Rechercher", font=("Arial", 12), command=lambda: self.afficher_resultats(entry_search, frame_results, selected_category))
+        btn_search.pack(side="left")
 
-    def answer_question(self, answer):
-        self.responses[questions_and_answers[self.current_question]["question"]] = answer["category"]
-        self.current_question += 1
-        self.clear_screen()
+        # Sélecteur de catégories
+        categories = [(0, "Toutes")] + list(faq_data["categories"].items())
+        selected_category = tk.IntVar(value=0)
 
-        if self.current_question < len(questions_and_answers):
-            self.show_question()
-        else:
-            self.show_daily_summary()
+        frame_categories = tk.Frame(faq_window, bg="#ADD8E6")
+        frame_categories.pack(pady=10)
 
-    def show_daily_summary(self):
-        self.clear_screen()
-        tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+        for cat_id, cat_nom in categories:
+            rb = tk.Radiobutton(frame_categories, text=cat_nom, variable=selected_category, value=cat_id, bg="#ADD8E6")
+            rb.pack(anchor="w")
 
-        emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
-        for category in self.responses.values():
-            emotions_count[category] += 1
-    
-        create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
-                         colors=["#4caf50", "#ffeb3b", "#f44336"])
+        # Frame pour les résultats
+        frame_results = tk.Frame(faq_window, bg="#ADD8E6")
+        frame_results.pack(pady=10)
 
-        encouragement = random.choice(encouragements)
-        tk.Label(self.root, text=encouragement, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
+    def afficher_resultats(self, entry_search, frame_results, selected_category):
+        mot_cle = entry_search.get()
+        categorie_id = selected_category.get()
 
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+        # Supprimer les anciens résultats
+        for widget in frame_results.winfo_children():
+            widget.destroy()
 
-    def view_summary(self):
-        self.clear_screen()
-        tk.Label(self.root, text="Résumé du jour", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
+        # Recherche et affichage des résultats
+        resultats = rechercher_questions(mot_cle, categorie_id if categorie_id != 0 else None)
         
-        if  tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, 
-                      font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20):
-            tk.Label(self.root, text="Aucune réponse disponible pour aujourd'hui. Veuillez remplir le questionnaire.",
-                     font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-            tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, 
-                      font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-            return
-
-        emotions_count = {"Positif": 0, "Neutre": 0, "Négatif": 0}
-        for category in self.responses.values():
-            emotions_count[category] += 1
-
-        create_bar_graph(self.root, emotions_count, title="Résumé des réponses d'aujourd'hui",
-                         colors=["#4caf50", "#ffeb3b", "#f44336"])
-        
-        if emotions_count["Négatif"] > 4:
-            message = "Mbappé va bientôt venir te voir pour te remonter le morale !!!"
+        if resultats:
+            for q, r in resultats:
+                lbl_q = tk.Label(frame_results, text=q, font=("Arial", 12, "bold"), bg="#ADD8E6")
+                lbl_r = tk.Label(frame_results, text=r, font=("Arial", 12), bg="#ADD8E6")
+                lbl_q.pack(anchor="w", padx=10, pady=2)
+                lbl_r.pack(anchor="w", padx=20, pady=2)
         else:
-            encouragement = random.choice(encouragements)
-            message = encouragement
-        if emotions_count["Positif"] > 4:
-            message = "Tu vas très bien, Mbappé te salut de loin."
-        
-        tk.Label(self.root, text=message, font=("Helvetica", 14), bg="#003366", fg="white", wraplength=600).pack(pady=20)
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+            lbl_no_result = tk.Label(frame_results, text="Aucun résultat trouvé.", font=("Arial", 12, "italic"), bg="#ADD8E6")
+            lbl_no_result.pack(pady=10)
 
-    def view_weekly_summary(self):
-        self.clear_screen()
-        tk.Label(self.root, text="Résumé de la semaine", font=("Helvetica", 24, "bold"), bg="#003366", fg="white").pack(pady=20)
-        weekly_summary = self.app.calculate_weekly_summary()
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen,
-                  font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
-        create_bar_graph(self.root, weekly_summary, title="Moyenne des réponses de la semaine",
-                         colors=["#4caf50", "#ffeb3b", "#f44336"])
-        tk.Button(self.root, text="Retour à l'accueil", command=self.create_home_screen, font=("Helvetica", 14), bg="#00509e", fg="white").pack(pady=20)
+    # ... (le reste des méthodes de MentalHealthGUI)
 
 if __name__ == "__main__":
     root = tk.Tk()

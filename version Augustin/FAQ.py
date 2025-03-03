@@ -40,15 +40,44 @@ faq_data = {
             "reponse": "Évitez les écrans avant de dormir, créez une routine apaisante et limitez la caféine en soirée.",
             "categorie_id": 5,
             "mots_cles": ["sommeil", "caféine", "écrans", "routine"]
+        }, 
+        {
+            "question": "Quels sont les effets de la méditation sur l'anxiété ?",
+            "reponse": "La méditation peut aider à réduire les symptômes de l'anxiété en favorisant la relaxation et en améliorant la concentration.",
+            "categorie_id": 1,
+            "mots_cles": ["méditation", "anxiété", "relaxation", "concentration"]
+        },
+        {
+            "question": "Comment aider un ami en dépression ?",
+            "reponse": "Soyez à l'écoute, encouragez-le à consulter un professionnel et proposez-lui de l'accompagner dans ses activités quotidiennes.",
+            "categorie_id": 2,
+            "mots_cles": ["ami", "dépression", "écoute", "professionnel"]
+        },
+        {
+            "question": "Quels sont les symptômes du stress chronique ?",
+            "reponse": "Les symptômes incluent des maux de tête fréquents, des troubles du sommeil, une irritabilité et une fatigue persistante.",
+            "categorie_id": 3,
+            "mots_cles": ["stress", "chronique", "symptômes", "fatigue"]
+        },
+        {
+            "question": "Comment pratiquer la gratitude au quotidien ?",
+            "reponse": "Tenez un journal de gratitude, exprimez votre reconnaissance aux autres et prenez le temps de réfléchir aux aspects positifs de votre vie.",
+            "categorie_id": 4,
+            "mots_cles": ["gratitude", "journal", "reconnaissance", "positif"]
+        },
+        {
+            "question": "Quels sont les effets de la caféine sur le sommeil ?",
+            "reponse": "La caféine peut perturber le sommeil en retardant l'endormissement et en réduisant la qualité du sommeil.",
+            "categorie_id": 5,
+                }
+            ]
         }
-    ]
-}
 
 def rechercher_questions(mot_cle="", categorie_id=None):
     """Recherche des questions en fonction d'un mot-clé ou d'une catégorie"""
     resultats = []
     for question in faq_data["questions"]:
-        if mot_cle.lower() in [m.lower() for m in question["mots_cles"]] or mot_cle == "":
+        if "mots_cles" in question and (mot_cle.lower() in [m.lower() for m in question["mots_cles"]] or mot_cle == ""):
             if categorie_id is None or question["categorie_id"] == categorie_id:
                 resultats.append((question["question"], question["reponse"]))
     return resultats
