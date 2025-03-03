@@ -134,7 +134,7 @@ def afficher_resultats():
 # Interface graphique
 root = tk.Tk()
 root.title("FAQ Santé Mentale")
-root.geometry("600x500")
+root.geometry("660x500")
 root.configure(bg="#ADD8E6")  # Fond bleu clair
 
 # Label de titre
