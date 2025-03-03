@@ -8,7 +8,8 @@ faq_data = {
         2: "Dépression",
         3: "Stress",
         4: "Bien-être",
-        5: "Troubles du sommeil"
+        5: "Troubles du sommeil",
+        6: "Amour et relations"
     },
     "questions": [
         {
@@ -40,7 +41,7 @@ faq_data = {
             "reponse": "Évitez les écrans avant de dormir, créez une routine apaisante et limitez la caféine en soirée.",
             "categorie_id": 5,
             "mots_cles": ["sommeil", "caféine", "écrans", "routine"]
-        }, 
+        },
         {
             "question": "Quels sont les effets de la méditation sur l'anxiété ?",
             "reponse": "La méditation peut aider à réduire les symptômes de l'anxiété en favorisant la relaxation et en améliorant la concentration.",
@@ -69,9 +70,35 @@ faq_data = {
             "question": "Quels sont les effets de la caféine sur le sommeil ?",
             "reponse": "La caféine peut perturber le sommeil en retardant l'endormissement et en réduisant la qualité du sommeil.",
             "categorie_id": 5,
-                }
-            ]
+            "mots_cles": ["caféine", "sommeil", "insomnie", "énergie"]
+        },
+        # Nouvelles questions pour "Amour et relations"
+        {
+            "question": "Comment entretenir une relation de couple ?",
+            "reponse": "La communication, la confiance et le respect mutuel sont essentiels pour une relation équilibrée et durable.",
+            "categorie_id": 6,
+            "mots_cles": ["relation", "couple", "communication", "confiance"]
+        },
+        {
+            "question": "Quels sont les signes d’une relation toxique ?",
+            "reponse": "Une relation toxique se caractérise par un manque de respect, un contrôle excessif et une communication négative constante.",
+            "categorie_id": 6,
+            "mots_cles": ["relation", "toxique", "respect", "contrôle"]
+        },
+        {
+            "question": "Comment gérer une rupture amoureuse ?",
+            "reponse": "Prenez du temps pour vous, exprimez vos émotions et entourez-vous de proches pour retrouver un équilibre.",
+            "categorie_id": 6,
+            "mots_cles": ["rupture", "émotions", "équilibre", "soutien"]
+        },
+        {
+            "question": "Le romantisme est-il toujours important dans une relation ?",
+            "reponse": "Le romantisme aide à renforcer le lien dans un couple, mais il doit être adapté aux attentes et besoins des partenaires.",
+            "categorie_id": 6,
+            "mots_cles": ["romantisme", "relation", "couple", "sentiments"]
         }
+    ]
+}
 
 def rechercher_questions(mot_cle="", categorie_id=None):
     """Recherche des questions en fonction d'un mot-clé ou d'une catégorie"""
