@@ -72,7 +72,6 @@ faq_data = {
             "categorie_id": 5,
             "mots_cles": ["caféine", "sommeil", "insomnie", "énergie"]
         },
-        # Nouvelles questions pour "Amour et relations"
         {
             "question": "Comment entretenir une relation de couple ?",
             "reponse": "La communication, la confiance et le respect mutuel sont essentiels pour une relation équilibrée et durable.",
@@ -113,14 +112,11 @@ def afficher_resultats():
     """Affiche les résultats de la recherche dans l'interface"""
     mot_cle = entry_search.get()
     categorie_id = selected_category.get()
-
     # Supprimer les anciens résultats
     for widget in frame_results.winfo_children():
         widget.destroy()
-
     # Recherche et affichage des résultats
     resultats = rechercher_questions(mot_cle, categorie_id if categorie_id != 0 else None)
-    
     if resultats:
         for q, r in resultats:
             lbl_q = tk.Label(frame_results, text=f"Q: {q}", font=("Arial", 12, "bold"), bg="#ADD8E6", wraplength=500, justify="left")
@@ -134,37 +130,28 @@ def afficher_resultats():
 # Interface graphique
 root = tk.Tk()
 root.title("FAQ Santé Mentale")
-root.geometry("600x500")
+root.geometry("660x500")
 root.configure(bg="#ADD8E6")  # Fond bleu clair
-
 # Label de titre
 title_label = tk.Label(root, text="FAQ Santé Mentale", font=("Arial", 16, "bold"), bg="#ADD8E6")
 title_label.pack(pady=10)
-
 # Barre de recherche
 frame_search = tk.Frame(root, bg="#ADD8E6")
 frame_search.pack(pady=5)
-
 entry_search = tk.Entry(frame_search, font=("Arial", 14), width=30)
 entry_search.pack(side="left", padx=5)
-
 btn_search = tk.Button(frame_search, text="Rechercher", font=("Arial", 12), command=afficher_resultats)
 btn_search.pack(side="left")
-
 # Sélecteur de catégories
 categories = [(0, "Toutes")] + list(faq_data["categories"].items())
 selected_category = tk.IntVar(value=0)
-
 frame_categories = tk.Frame(root, bg="#ADD8E6")
 frame_categories.pack(pady=10)
-
 for cat_id, cat_nom in categories:
     btn_cat = ttk.Radiobutton(frame_categories, text=cat_nom, variable=selected_category, value=cat_id, command=afficher_resultats)
     btn_cat.pack(side="left", padx=5)
-
 # Zone d'affichage des résultats
 frame_results = tk.Frame(root, bg="#ADD8E6")
 frame_results.pack(pady=10, fill="both", expand=True)
-
 # Lancer l'application
 root.mainloop()
