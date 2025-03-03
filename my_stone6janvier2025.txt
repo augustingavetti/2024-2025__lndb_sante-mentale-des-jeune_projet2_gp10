@@ -1,2 +1,0 @@
-le projet est assez bien avancé, le programme contient des identifiant et un mdp qui sont stockés puis des question QCM sont posé et un graphique rappelant les réponses est effectué, la fonctionnalité de pouvoir voir le dernier graphique marche bien. il faut maintenant pouvoir faire un résumé des dernier graphique + d'autre fonctionnalité.
-environ 65%
