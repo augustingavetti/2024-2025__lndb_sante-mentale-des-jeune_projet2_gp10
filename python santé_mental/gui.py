@@ -11,6 +11,7 @@ import random
 from dictionary import questions_and_answers
 from tkinter import scrolledtext
 import subprocess
+import os
 
 class MentalHealthApp:
     def export_responses_to_csv(self, filename="responses.csv"):
@@ -144,7 +145,9 @@ class MentalHealthGUI:
         link.bind("<Button-1>", lambda e: webbrowser.open_new("https://www.babelio.com/livres-/Sante-mentale/78415"))
     
     def open_faq(self):
-        subprocess.Popen(["python", "H:/Documents/NSI/projet 2/2024-2025__p04_projet2_gp10/2024-2025__lndb_sante-mentale-des-jeune_projet2_gp10/python santé_mental/FAQ.py"])
+        base_path = os.path.dirname(__file__)
+        faq_path = os.path.join(base_path, "FAQ.py")
+        subprocess.Popen(["python", faq_path])
 
     def export_data_to_csv(self):
         # Récupérer les réponses de l'utilisateur actuel uniquement
